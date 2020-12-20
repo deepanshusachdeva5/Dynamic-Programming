@@ -1,0 +1,67 @@
+Given a rows x cols matrix grid representing a field of cherries. Each cell in grid represents the number of cherries that you can collect.
+
+You have two robots that can collect cherries for you, Robot #1 is located at the top-left corner (0,0) , and Robot #2 is located at the top-right corner (0, cols-1) of the grid.
+
+Return the maximum number of cherries collection using both robots  by following the rules below:
+
+  From a cell (i,j), robots can move to cell (i+1, j-1) , (i+1, j) or (i+1, j+1).
+  When any robot is passing through a cell, It picks it up all cherries, and the cell becomes an empty cell (0).
+  When both robots stay on the same cell, only one of them takes the cherries.
+  Both robots cannot move outside of the grid at any moment.
+  Both robots should reach the bottom row in the grid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    int dp[80][80][80];
+    bool flag = false;
+        
+    int cherryPickup(vector<vector<int>>& grid,int idx = 0,int j1=0,int j2 =0 ) {
+        if(!flag){
+            idx = 0;
+            j1 = 0;
+            j2 = grid[0].size() -1;
+            memset(dp,-1,sizeof(dp));
+            flag = true;
+            
+        }
+        
+        if(idx==grid.size()){
+            return 0;
+        }
+        if(j1<0 || j1>=grid[0].size() || j2<0 || j2>=grid[0].size()){
+            return INT_MIN;
+        }
+        if(dp[idx][j1][j2]!=-1){
+            return dp[idx][j1][j2];
+        }
+        int ans = INT_MIN;
+        int curr = grid[idx][j1]+grid[idx][j2];
+        if(j1==j2){
+            curr -= grid[idx][j1];
+        }
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1,j2));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1+1,j2));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1-1,j2));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1,j2+1));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1+1,j2+1));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1-1,j2+1));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1,j2-1));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1+1,j2-1));
+        ans = max(ans,curr+cherryPickup(grid,idx+1,j1-1,j2-1));
+        
+        return dp[idx][j1][j2] = ans;
+        
+    }
+};
