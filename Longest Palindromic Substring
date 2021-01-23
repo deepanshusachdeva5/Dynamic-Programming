@@ -1,0 +1,35 @@
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        size = n 
+        flag = 0
+        ans = ""
+        for i in range(len(s)):
+            # print("flag : ",flag)
+            if flag == 1:
+                break
+            else:
+                loop_iter = n-size+1
+                
+                for j in range(0,loop_iter):
+                    # print(loop_iter)
+                    # big_temp = (s + '.')[:-1]
+                    temp = s[j:j+size]
+                    # print(j,j+size)
+                    reverse = temp[::-1]
+                    # print(s,temp,reverse,size,j,j+size)
+                    if temp == reverse:
+                        flag = 1
+                        ans = temp
+                        break
+                        
+                size-=1
+                
+                        
+        if flag == 1:
+            return ans
+        else:
+            if len(s)==0:
+                return ""
+            else:
+                return s[0]
